@@ -1,0 +1,159 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="ur3_ar10">
+        
+    <property name="M_PI" value="3.14159265359" />
+    <property name="kinect_prefix1" value=""/>
+    <property name="robot_prefix1" value=""/>
+    <property name="prefix" value=""/>    
+    <property name="torso_height" value="0.5"/>
+    <!-- common stuff -->
+    <xacro:include filename="$(find ur_description)/urdf/common.gazebo.xacro" />
+
+    <!-- ur3 -->
+    <xacro:include filename="$(find ur_description)/urdf/ur3.urdf.xacro" />
+
+    <!-- ar10 gripper -->
+    <xacro:include filename="$(find gripper_ur3)/urdf/ar10.urdf.xacro" />    
+
+    <!-- arm --> 
+    <xacro:ur3_robot prefix="" joint_limited="true"
+        shoulder_pan_lower_limit="${-pi/2}" shoulder_pan_upper_limit="${pi/2}"
+        shoulder_lift_lower_limit="${-pi}" shoulder_lift_upper_limit="${pi}"
+        elbow_joint_lower_limit="${-pi}" elbow_joint_upper_limit="${pi}"
+        wrist_1_lower_limit="${-pi}" wrist_1_upper_limit="${pi}"
+        wrist_2_lower_limit="${-pi}" wrist_2_upper_limit="${pi}"
+        wrist_3_lower_limit="${-pi}" wrist_3_upper_limit="${pi}"
+    />        
+
+    <!-- ar10 hand -->
+<!--     <xacro:ar10 prefix="${robot_prefix1}"/>   -->
+
+    <!-- total ur_ar10 system world -->
+    <link name="world" />    
+    <joint name="world_joint" type="fixed">
+        <parent link="world"/>
+        <child link="ground_base1"/>        
+        <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>        
+    </joint>    
+
+    <!-- torso body
+    <link name = "torso_body_link">
+<!-    <visual>
+            <origin xyz = "0 0 0.25" rpy = "0 0 0"/>
+        </visual>   
+       <visual>
+            <geometry>
+                <box size="0.22 0.22 ${torso_height}"/>            
+            </geometry>
+            <origin xyz = "0 0 0.25" rpy = "0 0 0"/>
+            <material name="LightGrey">
+                <color rgba="0.7 0.7 0.7 1.0"/>
+            </material>
+        </visual>
+        <collision>
+            <geometry>
+                <box size="0.22 0.22 ${torso_height}"/> 
+            </geometry>
+        </collision>        
+        <inertial>            
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <mass value = "100"/>
+            <inertia ixx="1"  ixy="0"  ixz="0" iyy="1" iyz="0" izz="1" />
+        </inertial>     
+    </link>  
+-->
+    <link name="${prefix}ground_base1">
+      <visual>
+        <geometry>
+          <box size="0.9 0.9 0.1"/>
+        </geometry>
+        <origin xyz="0 0 0.05" rpy="0 0 0"/>
+        <material name="white">
+          <color rgba="${150/255} ${150/255} ${150/255} 1.0"/>
+        </material>
+      </visual>
+      <collision>
+        <geometry>
+          <box size="0.9 0.9 0.1"/>
+        </geometry>
+        <origin xyz=" 0 0 0.05" rpy="0 0 0"/>
+      </collision>
+      <!--xacro:default_inertial mass="20"/-->
+      <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <mass value="100"/>
+        <inertia ixx="1"  ixy="0"  ixz="0" iyy="1" iyz="0" izz="1" />
+      </inertial>
+    </link>
+
+
+    <!-- ROS base_link to UR 'Base' Coordinates transform -->
+    <joint name="${prefix}base_pillar_joint" type="fixed">
+      <origin xyz="0 0 0.1" rpy="0 0 0"/>
+      <parent link="${prefix}ground_base1"/>
+      <child link="${prefix}base_pillar"/>
+    </joint>
+    <link name="${prefix}base_pillar">
+      <visual>
+        <geometry>
+          <box size=".15 .15 0.62"/>
+        </geometry>
+        <origin xyz="0 0 0.31" rpy="0 0 0"/>
+        <material name="white">
+          <color rgba="${150/255} ${150/255} ${150/255} 1.0"/>
+        </material>
+      </visual>
+      <collision>
+        <geometry>
+          <box size=".15 .15 0.62"/>
+        </geometry>
+        <origin xyz=" 0 0 0.31" rpy="0 0 0"/>
+      </collision>
+      <!--xacro:default_inertial mass="10"/-->
+      <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <mass value="50"/>
+        <inertia ixx="1"  ixy="0"  ixz="0" iyy="1" iyz="0" izz="1" />
+      </inertial>
+    </link>
+
+    <!-- define joint from base_pillar to base_link-->
+    <joint name="${prefix}base_link_joint" type="fixed">
+      <origin xyz="0 0 0.62" rpy="0 0 0"/>
+      <parent link="${prefix}base_pillar"/>
+      <child link="${prefix}base_link"/>
+    </joint>
+
+
+    <xacro:include filename="$(find common_sensors)/urdf/sensors/my_kinect_sensor.urdf.xacro" />
+
+
+    <!-- Kinect mount -->
+    <link name="mount_link">
+        <visual>
+            <geometry>
+                <box size="0.20 0.08 0.01"/>                   
+                <!--mesh filename="package://common_sensors/meshes/MountCamera.stl"/-->                         
+            </geometry>
+            <origin xyz = "0 0 -0.06" rpy = "0 1.57 0"/>
+            <material name="LightGrey">
+                <color rgba="0.5 0.3 0.3 1.0"/>
+            </material>
+        </visual>
+        <collision>
+            <geometry>
+                <box size="0.20 0.08 0.01"/>                   
+            </geometry>
+        </collision>    
+    </link> 
+    <joint name="mount_joint" type="fixed">
+        <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        <parent link="ee_link"/>
+        <child link="mount_link"/>
+    </joint>
+
+    
+   
+
+</robot>
+

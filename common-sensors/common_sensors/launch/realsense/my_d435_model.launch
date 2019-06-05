@@ -1,0 +1,10 @@
+<launch>
+    <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find common_sensors)/urdf/sensors/my_test_d435.urdf.xacro'" />
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher" />
+
+
+    <arg name="gui" default="True" />
+    <param name="use_gui" value="$(arg gui)"/>
+    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find common_sensors)/rviz/d435_urdf.rviz" required="true" />
+
+</launch>

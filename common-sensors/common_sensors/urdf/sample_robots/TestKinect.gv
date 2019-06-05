@@ -1,0 +1,20 @@
+digraph G {
+node [shape=box];
+"world" [label="world"];
+"camera_rgb_frame" [label="camera_rgb_frame"];
+"camera_depth_frame" [label="camera_depth_frame"];
+"camera_depth_optical_frame" [label="camera_depth_optical_frame"];
+"camera_link" [label="camera_link"];
+"camera_rgb_optical_frame" [label="camera_rgb_optical_frame"];
+node [shape=ellipse, color=blue, fontcolor=blue];
+"world" -> "camera_rgb_joint" [label="xyz: 0 0 0 \nrpy: 0 -0 0"]
+"camera_rgb_joint" -> "camera_rgb_frame"
+"camera_rgb_frame" -> "camera_depth_joint" [label="xyz: 0 0 0 \nrpy: 0 -0 0"]
+"camera_depth_joint" -> "camera_depth_frame"
+"camera_depth_frame" -> "camera_depth_optical_joint" [label="xyz: 0 0 0 \nrpy: -1.5708 -5.55112e-17 -1.5708"]
+"camera_depth_optical_joint" -> "camera_depth_optical_frame"
+"camera_rgb_frame" -> "camera_joint" [label="xyz: -0.031 -0 -0.016 \nrpy: 0 -0 0"]
+"camera_joint" -> "camera_link"
+"camera_rgb_frame" -> "camera_rgb_optical_joint" [label="xyz: 0 0 0 \nrpy: -1.5708 -5.55112e-17 -1.5708"]
+"camera_rgb_optical_joint" -> "camera_rgb_optical_frame"
+}

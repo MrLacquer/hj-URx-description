@@ -1,0 +1,179 @@
+digraph G {
+node [shape=box];
+"world" [label="world"];
+"camera_rgb_frame" [label="camera_rgb_frame"];
+"camera_depth_frame" [label="camera_depth_frame"];
+"camera_depth_optical_frame" [label="camera_depth_optical_frame"];
+"camera_link" [label="camera_link"];
+"camera_rgb_optical_frame" [label="camera_rgb_optical_frame"];
+"base_link" [label="base_link"];
+"base" [label="base"];
+"shoulder_link" [label="shoulder_link"];
+"upper_arm_link" [label="upper_arm_link"];
+"forearm_link" [label="forearm_link"];
+"wrist_1_link" [label="wrist_1_link"];
+"wrist_2_link" [label="wrist_2_link"];
+"wrist_3_link" [label="wrist_3_link"];
+"ee_link" [label="ee_link"];
+"wrist_plate" [label="wrist_plate"];
+"circuit_support" [label="circuit_support"];
+"palm1" [label="palm1"];
+"motor0" [label="motor0"];
+"pris0" [label="pris0"];
+"palm2" [label="palm2"];
+"knuckle1" [label="knuckle1"];
+"finger1a" [label="finger1a"];
+"finger1b" [label="finger1b"];
+"finger1c" [label="finger1c"];
+"motor3" [label="motor3"];
+"pris3" [label="pris3"];
+"motor2" [label="motor2"];
+"pris2" [label="pris2"];
+"knuckle2" [label="knuckle2"];
+"finger2a" [label="finger2a"];
+"finger2b" [label="finger2b"];
+"finger2c" [label="finger2c"];
+"motor5" [label="motor5"];
+"pris5" [label="pris5"];
+"motor4" [label="motor4"];
+"pris4" [label="pris4"];
+"knuckle3" [label="knuckle3"];
+"finger3a" [label="finger3a"];
+"finger3b" [label="finger3b"];
+"finger3c" [label="finger3c"];
+"motor7" [label="motor7"];
+"pris7" [label="pris7"];
+"motor6" [label="motor6"];
+"pris6" [label="pris6"];
+"knuckle4" [label="knuckle4"];
+"finger4a" [label="finger4a"];
+"finger4b" [label="finger4b"];
+"finger4c" [label="finger4c"];
+"motor9" [label="motor9"];
+"pris9" [label="pris9"];
+"motor8" [label="motor8"];
+"pris8" [label="pris8"];
+"thumb" [label="thumb"];
+"motor1" [label="motor1"];
+"pris1" [label="pris1"];
+"thumb2" [label="thumb2"];
+"thumb_tip" [label="thumb_tip"];
+"tool0" [label="tool0"];
+node [shape=ellipse, color=blue, fontcolor=blue];
+"world" -> "camera_rgb_joint" [label="xyz: 0 0 0 \nrpy: 0 -0 0"]
+"camera_rgb_joint" -> "camera_rgb_frame"
+"camera_rgb_frame" -> "camera_depth_joint" [label="xyz: 0 0 0 \nrpy: 0 -0 0"]
+"camera_depth_joint" -> "camera_depth_frame"
+"camera_depth_frame" -> "camera_depth_optical_joint" [label="xyz: 0 0 0 \nrpy: -1.5708 -5.55112e-17 -1.5708"]
+"camera_depth_optical_joint" -> "camera_depth_optical_frame"
+"camera_rgb_frame" -> "camera_joint" [label="xyz: -0.031 0 -0.016 \nrpy: 0 -0 0"]
+"camera_joint" -> "camera_link"
+"camera_rgb_frame" -> "camera_rgb_optical_joint" [label="xyz: 0 0 0 \nrpy: -1.5708 -5.55112e-17 -1.5708"]
+"camera_rgb_optical_joint" -> "camera_rgb_optical_frame"
+"world" -> "world_joint" [label="xyz: 0 0 0 \nrpy: 0 -0 0"]
+"world_joint" -> "base_link"
+"base_link" -> "base_link-base_fixed_joint" [label="xyz: 0 0 0 \nrpy: 0 0 3.14159"]
+"base_link-base_fixed_joint" -> "base"
+"base_link" -> "shoulder_pan_joint" [label="xyz: 0 0 0.1519 \nrpy: 0 -0 0"]
+"shoulder_pan_joint" -> "shoulder_link"
+"shoulder_link" -> "shoulder_lift_joint" [label="xyz: 0 0.1198 0 \nrpy: 0 1.5708 -0"]
+"shoulder_lift_joint" -> "upper_arm_link"
+"upper_arm_link" -> "elbow_joint" [label="xyz: 0 -0.0925 0.24365 \nrpy: 0 -0 0"]
+"elbow_joint" -> "forearm_link"
+"forearm_link" -> "wrist_1_joint" [label="xyz: 0 0 0.21325 \nrpy: 0 1.5708 -0"]
+"wrist_1_joint" -> "wrist_1_link"
+"wrist_1_link" -> "wrist_2_joint" [label="xyz: 0 0.08505 0 \nrpy: 0 -0 0"]
+"wrist_2_joint" -> "wrist_2_link"
+"wrist_2_link" -> "wrist_3_joint" [label="xyz: 0 0 0.08535 \nrpy: 0 -0 0"]
+"wrist_3_joint" -> "wrist_3_link"
+"wrist_3_link" -> "ee_fixed_joint" [label="xyz: 0 0.0819 0 \nrpy: 0 -0 1.5708"]
+"ee_fixed_joint" -> "ee_link"
+"ee_link" -> "wrist2ee_link" [label="xyz: 0 0 0.026 \nrpy: 0 -0 0"]
+"wrist2ee_link" -> "wrist_plate"
+"wrist_plate" -> "wrist_plate_to_circuit_support" [label="xyz: 0 0 0.026 \nrpy: 0 -0 0"]
+"wrist_plate_to_circuit_support" -> "circuit_support"
+"circuit_support" -> "circuit_support_to_palm1" [label="xyz: 0 0.015 0.04815 \nrpy: 0 -0 0"]
+"circuit_support_to_palm1" -> "palm1"
+"palm1" -> "palm1_to_motor0" [label="xyz: 0 -0.0145 -0.015 \nrpy: 1.57 -1.2945 4.06982e-16"]
+"palm1_to_motor0" -> "motor0"
+"motor0" -> "pris0" [label="xyz: 0 0.03 0 \nrpy: 1.57 -0 0"]
+"pris0" -> "pris0"
+"palm1" -> "palm1_to_palm2" [label="xyz: -0.01425 0 0.02315 \nrpy: 0 -0 0"]
+"palm1_to_palm2" -> "palm2"
+"palm2" -> "palm2_to_knuckle1" [label="xyz: 0.0315 -0.00375 0.014 \nrpy: 0 -0 0"]
+"palm2_to_knuckle1" -> "knuckle1"
+"knuckle1" -> "knuckle1_to_finger1a" [label="xyz: 0 0 0.018 \nrpy: 0 -0 0"]
+"knuckle1_to_finger1a" -> "finger1a"
+"finger1a" -> "finger1a_to_finger1b" [label="xyz: 0 0 0.045 \nrpy: 0 -0 0"]
+"finger1a_to_finger1b" -> "finger1b"
+"finger1b" -> "finger1b_to_finger1c" [label="xyz: 0 0 0.03 \nrpy: 0 -0 0"]
+"finger1b_to_finger1c" -> "finger1c"
+"finger1a" -> "motor3_to_finger1a" [label="xyz: 0 -0.0145 0.01 \nrpy: 1.57 -0 0"]
+"motor3_to_finger1a" -> "motor3"
+"motor3" -> "pris3" [label="xyz: 0 0.03 0 \nrpy: 1.57 -0 0"]
+"pris3" -> "pris3"
+"knuckle1" -> "knuckle1_to_motor2" [label="xyz: 0 -0.0145 -0.045 \nrpy: 1.57 -0 0"]
+"knuckle1_to_motor2" -> "motor2"
+"motor2" -> "pris2" [label="xyz: 0 0.03 0 \nrpy: 1.57 -0 0"]
+"pris2" -> "pris2"
+"palm2" -> "palm2_to_knuckle2" [label="xyz: 0.0105 -0.00375 0.0175 \nrpy: 0 -0 0"]
+"palm2_to_knuckle2" -> "knuckle2"
+"knuckle2" -> "knuckle2_to_finger2a" [label="xyz: 0 0 0.02 \nrpy: 0 -0 0"]
+"knuckle2_to_finger2a" -> "finger2a"
+"finger2a" -> "finger2a_to_finger2b" [label="xyz: 0 0 0.045 \nrpy: 0 -0 0"]
+"finger2a_to_finger2b" -> "finger2b"
+"finger2b" -> "finger2b_to_finger2c" [label="xyz: 0 0 0.03 \nrpy: 0 -0 0"]
+"finger2b_to_finger2c" -> "finger2c"
+"finger2a" -> "motor5_to_finger2a" [label="xyz: 0 -0.0145 0.01 \nrpy: 1.57 -0 0"]
+"motor5_to_finger2a" -> "motor5"
+"motor5" -> "pris5" [label="xyz: 0 0.03 0 \nrpy: 1.57 -0 0"]
+"pris5" -> "pris5"
+"knuckle2" -> "knuckle2_to_motor4" [label="xyz: 0 -0.0145 -0.045 \nrpy: 1.57 -0 0"]
+"knuckle2_to_motor4" -> "motor4"
+"motor4" -> "pris4" [label="xyz: 0 0.03 0 \nrpy: 1.57 -0 0"]
+"pris4" -> "pris4"
+"palm2" -> "palm2_to_knuckle3" [label="xyz: -0.0105 -0.00375 0.028 \nrpy: 0 -0 0"]
+"palm2_to_knuckle3" -> "knuckle3"
+"knuckle3" -> "knuckle3_to_finger3a" [label="xyz: 0 0 0.03 \nrpy: 0 -0 0"]
+"knuckle3_to_finger3a" -> "finger3a"
+"finger3a" -> "finger3a_to_finger3b" [label="xyz: 0 0 0.045 \nrpy: 0 -0 0"]
+"finger3a_to_finger3b" -> "finger3b"
+"finger3b" -> "finger3b_to_finger3c" [label="xyz: 0 0 0.03 \nrpy: 0 -0 0"]
+"finger3b_to_finger3c" -> "finger3c"
+"finger3a" -> "motor7_to_finger3a" [label="xyz: 0 -0.0145 0.01 \nrpy: 1.57 -0 0"]
+"motor7_to_finger3a" -> "motor7"
+"motor7" -> "pris7" [label="xyz: 0 0.03 0 \nrpy: 1.57 -0 0"]
+"pris7" -> "pris7"
+"knuckle3" -> "knuckle3_to_motor6" [label="xyz: 0 -0.0145 -0.045 \nrpy: 1.57 -0 0"]
+"knuckle3_to_motor6" -> "motor6"
+"motor6" -> "pris6" [label="xyz: 0 0.03 0 \nrpy: 1.57 -0 0"]
+"pris6" -> "pris6"
+"palm2" -> "palm2_to_knuckle4" [label="xyz: -0.0315 -0.00375 0.0255 \nrpy: 0 -0 0"]
+"palm2_to_knuckle4" -> "knuckle4"
+"knuckle4" -> "knuckle4_to_finger4a" [label="xyz: 0 0 0.03 \nrpy: 0 -0 0"]
+"knuckle4_to_finger4a" -> "finger4a"
+"finger4a" -> "finger4a_to_finger4b" [label="xyz: 0 0 0.045 \nrpy: 0 -0 0"]
+"finger4a_to_finger4b" -> "finger4b"
+"finger4b" -> "finger4b_to_finger4c" [label="xyz: 0 0 0.03 \nrpy: 0 -0 0"]
+"finger4b_to_finger4c" -> "finger4c"
+"finger4a" -> "motor9_to_finger4a" [label="xyz: 0 -0.0145 0.01 \nrpy: 1.57 -0 0"]
+"motor9_to_finger4a" -> "motor9"
+"motor9" -> "pris9" [label="xyz: 0 0.03 0 \nrpy: 1.57 -0 0"]
+"pris9" -> "pris9"
+"knuckle4" -> "knuckle4_to_motor8" [label="xyz: 0 -0.0145 -0.045 \nrpy: 1.57 -0 0"]
+"knuckle4_to_motor8" -> "motor8"
+"motor8" -> "pris8" [label="xyz: 0 0.03 0 \nrpy: 1.57 -0 0"]
+"pris8" -> "pris8"
+"palm1" -> "palm1_to_thumb" [label="xyz: -0.045 -0.01 0 \nrpy: -2.8872e-17 0.279 1.57"]
+"palm1_to_thumb" -> "thumb"
+"thumb" -> "thumb_to_motor1" [label="xyz: 0 -0.0145 -0.01 \nrpy: 0 -0 0"]
+"thumb_to_motor1" -> "motor1"
+"motor1" -> "pris1" [label="xyz: 0 0.03 0 \nrpy: 1.57 -0 0"]
+"pris1" -> "pris1"
+"thumb" -> "thumb_to_thumb2" [label="xyz: 0 0.045 -0.005 \nrpy: 0 -0 0"]
+"thumb_to_thumb2" -> "thumb2"
+"thumb2" -> "thumb2_to_thumb_tip" [label="xyz: 0 0.03 0 \nrpy: 0.698 -0 0"]
+"thumb2_to_thumb_tip" -> "thumb_tip"
+"wrist_3_link" -> "wrist_3_link-tool0_fixed_joint" [label="xyz: 0 0.0819 0 \nrpy: -1.5708 0 0"]
+"wrist_3_link-tool0_fixed_joint" -> "tool0"
+}
