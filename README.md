@@ -20,3 +20,8 @@ for backup repository
     ```
     $ roslaunch gripper_ur3 ur3_hand.launch
     ```
+    - how to collision check?
+        - take a look ur3_d435.launch file, and editing:
+        ```
+        $ roslaunch ur3_hj3_moveit ur3_d435.launch
+        ```
