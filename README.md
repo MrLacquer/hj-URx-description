@@ -25,3 +25,16 @@ for backup repository
         ```
         $ roslaunch ur3_hj3_moveit ur3_d435.launch
         ```
+
+### update
+- 2019.07.15 3nd backup
+    - update the hj_hand.urdf.xacro:
+        - write the full hj_hand urdf        
+    
+    ```
+    $ roslaunch gripper_ur3 hj_hand_display.launch
+
+    check-up the collisions:
+    $ roslaunch gripper_ur3 gazebo_collision_check.launch
+    ```
+    

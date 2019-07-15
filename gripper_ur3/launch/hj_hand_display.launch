@@ -1,0 +1,11 @@
+<launch>
+	<arg name="model" />
+	<arg name="gui" default="True" />
+	<arg name="rvizconfig" default="$(find ar10_description)/urdf.rviz" />
+	<param name="robot_description" command="$(find xacro)/xacro.py $(find gripper_ur3)/urdf/hj_hand.urdf.xacro" />
+	<param name="use_gui" value="$(arg gui)"/>
+	<node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
+	<node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher" />
+	<!-- Launch visualization in rviz -->
+      <node name="rviz" pkg="rviz" type="rviz" args="-d $(find gripper_ur3)/hj_hand_display.rviz" required="True" />
+</launch>
