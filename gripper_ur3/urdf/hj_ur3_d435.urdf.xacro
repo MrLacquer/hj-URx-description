@@ -1,0 +1,180 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="hj_ur3_d435">
+      <!-- 
+      Autor: Hyeonjun Park
+      2019.07.17 
+      -->
+        
+      <property name="M_PI" value="3.14159265359" />
+      <property name="robot_prefix1" value=""/>
+      <property name="prefix" value=""/>    
+      <property name="torso_height" value="0.5"/>
+      <!-- common stuff -->
+      <xacro:include filename="$(find ur_description)/urdf/common.gazebo.xacro" />
+
+      <!-- ur3 -->
+      <xacro:include filename="$(find ur_description)/urdf/ur3.urdf.xacro" />
+
+      
+
+      <!-- arm --> 
+      <xacro:ur3_robot prefix="" joint_limited="true"
+            shoulder_pan_lower_limit="${-pi}" shoulder_pan_upper_limit="${pi}"
+            shoulder_lift_lower_limit="${-pi}" shoulder_lift_upper_limit="${pi}"
+            elbow_joint_lower_limit="${-pi}" elbow_joint_upper_limit="${pi}"
+            wrist_1_lower_limit="${-pi}" wrist_1_upper_limit="${pi}"
+            wrist_2_lower_limit="${-pi}" wrist_2_upper_limit="${pi}"
+            wrist_3_lower_limit="${-pi}" wrist_3_upper_limit="${pi}"
+      />        
+
+      <!-- total ur system world -->
+      <link name="world" />    
+      <joint name="world_joint" type="fixed">
+            <parent link="world"/>
+            <child link="ground_base1"/>        
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>        
+      </joint>    
+
+      <link name="${prefix}ground_base1">
+            <visual>
+            <geometry>
+            <box size="0.680 0.580 0.113"/>
+            </geometry>
+            <origin xyz="0 0 0.05" rpy="0 0 0"/>
+            <material name="white">
+            <color rgba="${150/255} ${150/255} ${150/255} 1.0"/>
+            </material>
+            </visual>
+            <collision>
+            <geometry>
+            <box size="0.680 0.580 0.113"/>
+            </geometry>
+            <origin xyz=" 0 0 0.05" rpy="0 0 0"/>
+            </collision>
+            <!--xacro:default_inertial mass="20"/-->
+            <inertial>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <mass value="100"/>
+            <inertia ixx="1"  ixy="0"  ixz="0" iyy="1" iyz="0" izz="1" />
+            </inertial>
+      </link>
+
+
+      <!-- ROS base_link to UR 'Base' Coordinates transform -->
+      <joint name="${prefix}base_pillar_joint" type="fixed">
+            <origin xyz="0 0 0.1" rpy="0 0 0"/>
+            <parent link="${prefix}ground_base1"/>
+            <child link="${prefix}base_pillar"/>
+      </joint>
+      <link name="${prefix}base_pillar">
+            <visual>
+            <geometry>
+            <box size="0.260 0.240 0.760"/>
+            </geometry>
+            <origin xyz="0 0 0.385" rpy="0 0 0"/>
+            <material name="white">
+            <color rgba="${150/255} ${150/255} ${150/255} 1.0"/>
+            </material>
+            </visual>
+            <collision>
+            <geometry>
+            <box size="0.260 0.240 0.760"/>
+            </geometry>
+            <origin xyz="0 0 0.385" rpy="0 0 0"/>
+            </collision>
+            <!--xacro:default_inertial mass="10"/-->
+            <inertial>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <mass value="50"/>
+            <inertia ixx="1"  ixy="0"  ixz="0" iyy="1" iyz="0" izz="1" />
+            </inertial>
+      </link>
+
+      <!-- define joint from base_pillar to base_link-->
+      <joint name="${prefix}base_link_joint" type="fixed">
+            <origin xyz="0 0 0.77" rpy="0 0 0"/>
+            <parent link="${prefix}base_pillar"/>
+            <child link="${prefix}base_link"/>
+      </joint>
+
+      <xacro:include filename="$(find common_sensors)/urdf/sensors/my_d435.urdf.xacro" /> <!-- in the sim_ws-->
+
+      <xacro:property name="mount_x" value="-0.0005" />
+      <xacro:property name="mount_y" value="0.0" />
+      <xacro:property name="mount_z" value="0.0" />
+      <xacro:property name="mount_roll" value="3.14" />
+      <xacro:property name="mount_pitch" value="0" />
+      <xacro:property name="mount_yaw" value="0.0" />
+      <!-- D435 mount -->
+      <link name="mount_link">
+            <visual>
+                  <geometry>
+                  <!--box size="0.1054 0.061 0.01"/-->                   
+                  <mesh filename="package://gripper_ur3/mesh/d435_mount_down.stl" scale="0.001 0.001 0.001"/> 
+                  </geometry>
+                  <origin xyz = "0.0 0.0 0.0" rpy = "0.0 0.0 0.0"/>
+                  <material name="LightGrey">
+                        <color rgba="0.7 0.7 0.7 1.0"/>
+                  </material>
+            </visual>
+            <collision>
+                  <origin xyz = "0.0 0.0 0.0" rpy = "0.0 0.0 0.0"/>
+                  <geometry>
+                  <mesh filename="package://gripper_ur3/mesh/d435_mount_down.stl" scale="0.001 0.001 0.001"/> 
+                  </geometry>
+            </collision>    
+      </link> 
+
+      <!-- D435 camera -->
+      <sensor_d435 parent="mount_link">
+            <origin xyz="0.026 0.0 0.06725" rpy="0 0 0"/>
+      </sensor_d435>
+
+      <joint name="mount_joint" type="fixed">
+            <origin xyz = "${mount_x} ${mount_y} ${mount_z}" rpy = "${mount_roll} ${mount_pitch} ${mount_yaw}"/>
+            <parent link="ee_link"/>
+            <child link="mount_link"/>
+      </joint>
+
+      <xacro:property name="handmount_x" value="0.0555" />
+      <xacro:property name="handmount_y" value="0.0" />
+      <xacro:property name="handmount_z" value="0.0" />
+      <xacro:property name="handmount_roll" value="${pi/2}" />
+      <xacro:property name="handmount_pitch" value="0.0" />
+      <xacro:property name="handmount_yaw" value="${pi/2}" />
+
+      <link name="handmount_link">
+      <visual>      
+            <geometry>
+                  <!--box size="0.0571 0.061 0.05"/-->
+                  <mesh filename="package://gripper_ur3/mesh/ur_hand_mount_down.stl" scale="0.001 0.001 0.001"/> 
+            </geometry>      
+            <!--origin xyz = "0.038 0.0 0.0" rpy = "0.0 0.0 0.0"/-->
+            <origin xyz = "0.0 0.0 -0.045" rpy = "0.0 0.0 0.0"/>
+            <material name="LightGrey">
+            </material>
+      </visual>
+      <collision>
+            <origin xyz = "0.0 0.0 -0.045" rpy = "0.0 0.0 0.0"/>
+            <geometry>
+                  <!--box size="0.0571 0.061 0.05"/-->
+                  <mesh filename="package://gripper_ur3/mesh/ur_hand_mount_down.stl" scale="0.001 0.001 0.001"/> 
+            </geometry>
+      </collision>
+      </link>     
+      
+      <joint name="handmount_joint" type="fixed">
+            <origin xyz = "${handmount_x} ${handmount_y} ${handmount_z}" rpy = "${handmount_roll} ${handmount_pitch} ${handmount_yaw}"/>
+            <parent link="mount_link"/>
+            <child link="handmount_link"/>
+      </joint>      
+
+      <xacro:include filename="$(find gripper_ur3)/urdf/hj_hand.urdf.xacro" />
+      <hj_hand parent="handmount_link">
+            <origin xyz="0.0 0.0 0.005" rpy="0 0 ${pi}"/>
+      </hj_hand>
+      
+
+      
+</robot>
+

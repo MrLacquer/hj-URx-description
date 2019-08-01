@@ -37,4 +37,9 @@ for backup repository
     check-up the collisions:
     $ roslaunch gripper_ur3 gazebo_collision_check.launch
     ```
-    
+
+### update
+- 2019.08.01 4th backup
+    - update the hj_hand.urdf.xacro:
+        - editing and updata        
+        

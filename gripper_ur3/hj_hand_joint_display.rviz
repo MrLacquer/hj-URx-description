@@ -6,12 +6,8 @@ Panels:
       Expanded:
         - /Global Options1
         - /Status1
-        - /RobotModel1
-        - /RobotModel1/Links1
-        - /TF1
-        - /TF1/Frames1
-      Splitter Ratio: 0.616714716
-    Tree Height: 351
+      Splitter Ratio: 0.5
+    Tree Height: 565
   - Class: rviz/Selection
     Name: Selection
   - Class: rviz/Tool Properties
@@ -269,150 +265,6 @@ Visualization Manager:
       Update Interval: 0
       Value: true
       Visual Enabled: true
-    - Class: rviz/TF
-      Enabled: true
-      Frame Timeout: 15
-      Frames:
-        All Enabled: false
-        ee_index_link:
-          Value: true
-        ee_little_link:
-          Value: true
-        ee_middle_link:
-          Value: true
-        ee_ring_link:
-          Value: true
-        ee_thumb_link:
-          Value: true
-        hand_palm:
-          Value: true
-        index_DIP:
-          Value: true
-        index_MCP:
-          Value: true
-        index_PIP:
-          Value: true
-        knuckle_index:
-          Value: true
-        knuckle_little:
-          Value: true
-        knuckle_middle:
-          Value: true
-        knuckle_ring:
-          Value: true
-        knuckle_thumb:
-          Value: true
-        little_DIP:
-          Value: true
-        little_MCP:
-          Value: true
-        little_PIP:
-          Value: true
-        middle_DIP:
-          Value: true
-        middle_MCP:
-          Value: true
-        middle_PIP:
-          Value: true
-        motor_index:
-          Value: true
-        motor_little:
-          Value: true
-        motor_middle:
-          Value: true
-        motor_ring:
-          Value: true
-        motor_thumb_DIP:
-          Value: true
-        motor_thumb_jo:
-          Value: true
-        pris_index:
-          Value: true
-        pris_little:
-          Value: true
-        pris_middle:
-          Value: true
-        pris_ring:
-          Value: true
-        pris_thumb_DIP:
-          Value: true
-        pris_thumb_jo:
-          Value: true
-        ring_DIP:
-          Value: true
-        ring_MCP:
-          Value: true
-        ring_PIP:
-          Value: true
-        thumb_DIP:
-          Value: true
-        thumb_MCP:
-          Value: true
-        thumb_joint:
-          Value: true
-        world:
-          Value: true
-        wrist_plate:
-          Value: false
-      Marker Scale: 0.100000001
-      Name: TF
-      Show Arrows: true
-      Show Axes: true
-      Show Names: true
-      Tree:
-        world:
-          wrist_plate:
-            hand_palm:
-              knuckle_index:
-                index_MCP:
-                  index_PIP:
-                    index_DIP:
-                      ee_index_link:
-                        {}
-                motor_index:
-                  pris_index:
-                    {}
-              knuckle_little:
-                little_MCP:
-                  little_PIP:
-                    little_DIP:
-                      ee_little_link:
-                        {}
-                motor_little:
-                  pris_little:
-                    {}
-              knuckle_middle:
-                middle_MCP:
-                  middle_PIP:
-                    middle_DIP:
-                      ee_middle_link:
-                        {}
-                motor_middle:
-                  pris_middle:
-                    {}
-              knuckle_ring:
-                motor_ring:
-                  pris_ring:
-                    {}
-                ring_MCP:
-                  ring_PIP:
-                    ring_DIP:
-                      ee_ring_link:
-                        {}
-              knuckle_thumb:
-                motor_thumb_jo:
-                  pris_thumb_jo:
-                    {}
-                thumb_joint:
-                  motor_thumb_DIP:
-                    pris_thumb_DIP:
-                      {}
-                  thumb_MCP:
-                    thumb_DIP:
-                      ee_thumb_link:
-                        {}
-      Update Interval: 0
-      Value: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -438,33 +290,33 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 0.47877273
+      Distance: 0.518739939
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.0599999987
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: -0.063568294
-        Y: -0.0509552918
-        Z: 0.0416784026
-      Focal Shape Fixed Size: false
+        X: -0.039273981
+        Y: -0.0701322332
+        Z: 0.0252971295
+      Focal Shape Fixed Size: true
       Focal Shape Size: 0.0500000007
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.00999999978
-      Pitch: 0.410397917
+      Pitch: 0.615398169
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 5.5335803
+      Yaw: 5.77358484
     Saved: ~
 Window Geometry:
   Displays:
     collapsed: false
-  Height: 632
+  Height: 846
   Hide Left Dock: false
-  Hide Right Dock: true
-  QMainWindow State: 000000ff00000000fd00000004000000000000016a000001eefc0200000008fb0000001200530065006c0065006300740069006f006e00000001e10000009b0000006100fffffffb0000001e0054006f006f006c002000500072006f007000650072007400690065007302000001ed000001df00000185000000a3fb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb000000100044006900730070006c0061007900730100000028000001ee000000d700fffffffb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261000000010000010f000002c4fc0200000003fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000000a005600690065007700730000000028000002c4000000ad00fffffffb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000490000000a9fc0100000001fb0000000a00560069006500770073030000004e00000080000002e10000019700000003000003e70000003efc0100000002fb0000000800540069006d00650100000000000003e70000030000fffffffb0000000800540069006d0065010000000000000450000000000000000000000277000001ee00000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  Hide Right Dock: false
+  QMainWindow State: 000000ff00000000fd00000004000000000000016a000002c4fc0200000008fb0000001200530065006c0065006300740069006f006e00000001e10000009b0000006100fffffffb0000001e0054006f006f006c002000500072006f007000650072007400690065007302000001ed000001df00000185000000a3fb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb000000100044006900730070006c0061007900730100000028000002c4000000d700fffffffb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261000000010000010f000002c4fc0200000003fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000000a005600690065007700730100000028000002c4000000ad00fffffffb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000490000000a9fc0100000001fb0000000a00560069006500770073030000004e00000080000002e10000019700000003000004b00000003efc0100000002fb0000000800540069006d00650100000000000004b00000030000fffffffb0000000800540069006d006501000000000000045000000000000000000000022b000002c400000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
   Selection:
     collapsed: false
   Time:
@@ -472,7 +324,7 @@ Window Geometry:
   Tool Properties:
     collapsed: false
   Views:
-    collapsed: true
-  Width: 999
-  X: 1561
-  Y: 420
+    collapsed: false
+  Width: 1200
+  X: 60
+  Y: 60

@@ -1,26 +1,35 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="hj_hand">
-<!--robot name="ar10"> -->
+<xacro:macro name="hj_hand" params="parent *origin">
+      <!-- 
+      Autor: Hyeonjun Park
+      2019.07.17 
+      -->
+      <xacro:include filename="$(find gripper_ur3)/urdf/hj_hand_transmission.xacro" />
+      <xacro:include filename="$(find gripper_ur3)/urdf/hj_hand_gazebo.xacro" />
 
       <xacro:property name="motor_x" value="0.016" />
       <xacro:property name="motor_y" value="0.035" />
       <xacro:property name="motor_z" value="0.02" />
       <xacro:property name="pris_x" value="0.005" />
       <xacro:property name="pris_y" value="0.005" />
-      <xacro:property name="pris_z" value="0.025" /> 
+      <xacro:property name="pris_z" value="0.025" />
+
+      <xacro:property name="knucle_mass" value="0.010" />
+      <xacro:property name="MCP_mass" value="0.0125" />
+      <xacro:property name="PIP_mass" value="0.0125" />
+      <xacro:property name="DIP_mass" value="0.0025" />
+      <xacro:property name="motor_mass" value="0.015" />
+
 
       <xacro:property name="motor_joint_x" value="0.0" />
       <xacro:property name="motor_joint_y" value="-0.0145" />
       <xacro:property name="motor_joint_z" value="0.006" />
 
       <xacro:property name="eef_offset_z" value="0.025725" />
+      <xacro:property name="motor_max_upper" value="0.0103" /> <!--joint origin-->
       
-      <link name="hj_hand_world" />    
-      <joint name="hj_hand_world_joint" type="fixed">
-            <parent link="hj_hand_world"/>
-            <child link="wrist_plate"/>        
-            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>        
-      </joint>    
+       
 
 <!--****************WRIST PLATE************************* -->  
       <link name="wrist_plate">
@@ -40,6 +49,12 @@
                   <origin xyz = "0.0 0.0 0.0" rpy = "1.57 0.0 0.0"/>
             </collision>
       </link>
+      <joint name="wrist_plate_joint" type="fixed">
+            <xacro:insert_block name="origin" />
+            <parent link="${parent}"/>
+            <child link="wrist_plate"/>
+            <limit lower="0.0" upper="0.0" effort="0.0" velocity="0.0"/>
+      </joint>
 
       <!--**************** hand palm*************************-->
       <xacro:property name="hand_palm_x" value="0.0" />
@@ -66,12 +81,14 @@
                   <origin xyz = "${hand_palm_x} ${hand_palm_y} ${hand_palm_z}" rpy = "${hand_palm_r} ${hand_palm_p} ${hand_palm_yaw}"/>
             </collision>
             <inertial>
-                  <mass value="1"/>
-                  <inertia ixx="0.4" ixy="0.0" ixz="0.0" iyy="0.4" iyz="0.0" izz="0.2"/>
+                  <mass value="0.09"/>
+                  <inertia ixx="1.0e-03" ixy="0.0" ixz="0.0"
+               iyy="1.0e-03" iyz="0.0"
+               izz="1.0e-03" />
             </inertial>
       </link>
 
-      <joint name="wrist_plate_to_hand_palm" type="fixed">
+      <joint name="hand_wrist_plate_to_hand_palm" type="fixed">
             <parent link="wrist_plate"/>
             <child link="hand_palm"/>
             <origin xyz="0 0 .026"/>
@@ -102,11 +119,13 @@
             <origin xyz = "0.0 0.0 0.0" rpy = "${knuckle_roll} ${knuckle_pitch} ${knuckle_yaw}"/>
       </collision>
       <inertial>
-            <mass value="1"/>
-            <inertia ixx="0.4" ixy="0.0" ixz="0.0" iyy="0.4" iyz="0.0" izz="0.2"/>
+            <mass value="${knucle_mass}"/>
+            <inertia ixx="1.0e-03" ixy="0.0" ixz="0.0"
+               iyy="1.0e-03" iyz="0.0"
+               izz="1.0e-03" />
       </inertial>
       </link>
-      <joint name="hand_palm_to_knuckle_index" type="fixed">
+      <joint name="knuckle_index_joint" type="fixed">
       <parent link="hand_palm"/>
       <child link="knuckle_index"/>
       <origin xyz ="${knuckle_4finger_x} 
@@ -130,11 +149,14 @@
             <origin xyz = "0.0 0.0 0.0" rpy = "${knuckle_roll} ${knuckle_pitch} ${knuckle_yaw}"/>
       </collision>
       <inertial>
-            <mass value="1"/>
-            <inertia ixx="0.4" ixy="0.0" ixz="0.0" iyy="0.4" iyz="0.0" izz="0.2"/>
+            <mass value="${knucle_mass}"/>
+            <inertia ixx="1.0e-03" ixy="0.0" ixz="0.0"
+               iyy="1.0e-03" iyz="0.0"
+               izz="1.0e-03" />
+            
       </inertial>
       </link>
-            <joint name="hand_palm_to_knuckle_middle" type="fixed">
+            <joint name="knuckle_middle_joint" type="fixed">
             <parent link="hand_palm"/>
             <child link="knuckle_middle"/>
             <origin xyz ="${knuckle_4finger_x + 0.0210} 
@@ -158,11 +180,14 @@
                   <origin xyz = "0.0 0.0 0.0" rpy = "${knuckle_roll} ${knuckle_pitch} ${knuckle_yaw}"/>
             </collision>
             <inertial>
-                  <mass value="1"/>
-                  <inertia ixx="0.4" ixy="0.0" ixz="0.0" iyy="0.4" iyz="0.0" izz="0.2"/>
+                  <mass value="${knucle_mass}"/>
+                  <inertia ixx="1.0e-03" ixy="0.0" ixz="0.0"
+               iyy="1.0e-03" iyz="0.0"
+               izz="1.0e-03" />
+                  
             </inertial>
       </link>
-            <joint name="hand_palm_to_knuckle_ring" type="fixed">
+            <joint name="knuckle_ring_joint" type="fixed">
                   <parent link="hand_palm"/>
                   <child link="knuckle_ring"/>
                   <origin xyz ="${knuckle_4finger_x + 0.0420} 
@@ -186,11 +211,14 @@
                   <origin xyz = "0.0 0.0 0.0" rpy = "${knuckle_roll} ${knuckle_pitch} ${knuckle_yaw}"/>
             </collision>
             <inertial>
-                  <mass value="1"/>
-                  <inertia ixx="0.4" ixy="0.0" ixz="0.0" iyy="0.4" iyz="0.0" izz="0.2"/>
+                  <mass value="${knucle_mass}"/>
+                  <inertia ixx="1.0e-03" ixy="0.0" ixz="0.0"
+               iyy="1.0e-03" iyz="0.0"
+               izz="1.0e-03" />
+                  
             </inertial>
       </link>
-      <joint name="hand_palm_to_knuckle_little" type="fixed">
+      <joint name="knuckle_little_joint" type="fixed">
             <parent link="hand_palm"/>
             <child link="knuckle_little"/>
             <origin xyz ="${knuckle_4finger_x + 0.0630} 
@@ -249,11 +277,14 @@
                   <origin xyz = "0.0 0.0 0.0" rpy = "${knuckle_roll} 0.0 ${knuckle_yaw}"/>
             </collision>
             <inertial>
-                  <mass value="1"/>
-                  <inertia ixx="0.4" ixy="0.0" ixz="0.0" iyy="0.4" iyz="0.0" izz="0.2"/>
+                  <mass value="${knucle_mass}"/>
+                  <inertia ixx="1.0e-03" ixy="0.0" ixz="0.0"
+               iyy="1.0e-03" iyz="0.0"
+               izz="1.0e-03" />
+                  
             </inertial>
       </link>
-      <joint name="hand_palm_to_knuckle_thumb" type="fixed">
+      <joint name="knuckle_thumb_joint" type="fixed">
             <parent link="hand_palm"/>
             <child link="knuckle_thumb"/>
             <origin xyz = "${knuckle_thumb_x} 
@@ -278,13 +309,16 @@
             <origin xyz = "${thumb_x} ${thumb_y} ${thumb_z}" rpy = "${thumb_roll} ${thumb_pitch} ${thumb_yaw}"/>
       </collision>
       <inertial>
-            <mass value="1"/>
-            <inertia ixx="0.4" ixy="0.0" ixz="0.0" iyy="0.4" iyz="0.0" izz="0.2"/>
+            <mass value="${motor_mass}"/>
+            <inertia ixx="1.0e-03" ixy="0.0" ixz="0.0"
+               iyy="1.0e-03" iyz="0.0"
+               izz="1.0e-03" />
+            
       </inertial>
       </link>
 
 
-      <joint name="knuckle_thumb_joint_to_thumb_joint" type="revolute">
+      <joint name="thumb_jo_joint" type="revolute">
             <axis xyz="0 0 -1"/>    <!--z axis rotate -->
             <limit effort="1000.0" lower="0.0" upper="1.8" velocity="0.5"/>
             <parent link="knuckle_thumb"/>
@@ -313,13 +347,16 @@
             <origin xyz = "${thumb_link_MCP_x} ${thumb_link_MCP_y} ${thumb_link_MCP_z}" rpy = "${thumb_finger_roll} ${thumb_finger_pitch} ${thumb_finger_yaw}"/>
       </collision>
       <inertial>
-            <mass value="1"/>
-            <inertia ixx="0.4" ixy="0.0" ixz="0.0" iyy="0.4" iyz="0.0" izz="0.2"/>
+            <mass value="${MCP_mass}"/>
+            <inertia ixx="1.0e-03" ixy="0.0" ixz="0.0"
+               iyy="1.0e-03" iyz="0.0"
+               izz="1.0e-03" />
+            
       </inertial>
       </link>
 
 
-      <joint name="thumb_joint_to_thumb_MCP" type="revolute">
+      <joint name="thumb_MCP_joint" type="revolute">
             <axis xyz="0 1 0"/>
             <limit effort="1000.0" lower="0.0" upper="1.0" velocity="0.5"/>
             <parent link="thumb_joint"/>
@@ -349,13 +386,16 @@
             <origin xyz = "${thumb_link_DIP_x} ${thumb_link_DIP_y} ${thumb_link_DIP_z}" rpy = "${thumb_finger_roll} ${thumb_finger_pitch} ${thumb_finger_yaw}"/>
       </collision>
       <inertial>
-            <mass value="1"/>
-            <inertia ixx="0.4" ixy="0.0" ixz="0.0" iyy="0.4" iyz="0.0" izz="0.2"/>
+            <mass value="${DIP_mass}"/>
+            <inertia ixx="1.0e-03" ixy="0.0" ixz="0.0"
+               iyy="1.0e-03" iyz="0.0"
+               izz="1.0e-03" />
+            
       </inertial>
       </link>
 
 
-      <joint name="thumb_MCP_to_thumb_DIP" type="revolute">
+      <joint name="thumb_DIP_joint" type="revolute">
             <axis xyz="0 1 0"/>
             <limit effort="1000.0" lower="0.0" upper="0.8" velocity="0.5"/>
             <parent link="thumb_MCP"/>
@@ -405,19 +445,22 @@
                   <color rgba="0.25 0.25 0.25 1"/>
                   </material>
             </visual>
-            <collision>
+            <!--collision>
                   <geometry>
                   <box size="${motor_x} ${motor_y} ${motor_z}"/>
                   </geometry>
                   <origin xyz="0 .02 0"/>
-            </collision>
+            </collision-->
             <inertial>
-                  <mass value="1"/>
-                  <inertia ixx="0.4" ixy="0.0" ixz="0.0" iyy="0.4" iyz="0.0" izz="0.2"/>
+                  <mass value="${motor_mass}"/>
+                  <inertia ixx="1.0e-03" ixy="0.0" ixz="0.0"
+               iyy="1.0e-03" iyz="0.0"
+               izz="1.0e-03" />
+                  
             </inertial>
       </link>
 
-      <joint name="knuckle_thumb_to_motor_thumb_jo" type="fixed">
+      <joint name="motor_thumb_jo_joint" type="fixed">
             <axis xyz="1 0 0"/>
             <parent link="knuckle_thumb"/>
             <child link="motor_thumb_jo"/>
@@ -434,14 +477,16 @@
                   </material>
             </visual>
             <inertial>
-                  <mass value="1"/>
-                  <inertia ixx="0.4" ixy="0.0" ixz="0.0" iyy="0.4" iyz="0.0" izz="0.2"/>
+                  <mass value="0.001"/>
+                  <inertia ixx="1.0e-03" ixy="0.0" ixz="0.0"
+               iyy="1.0e-03" iyz="0.0"
+               izz="1.0e-03" />
             </inertial>
       </link>
 
       <joint name="pris_thumb_jo_joint" type="prismatic">
             <axis xyz="0 0 -1"/>
-            <limit effort="1000.0" lower="0.0" upper="0.01" velocity="0.1"/>
+            <limit effort="1000.0" lower="0.0" upper="${motor_max_upper}" velocity="0.1"/>
             <parent link="motor_thumb_jo"/>
             <child link="pris_thumb_jo"/>
             <!--origin xyz="0 .03 0" rpy = "1.57 0 0"/-->
@@ -458,19 +503,21 @@
                   <color rgba="0.25 0.25 0.25 1"/>
                   </material>
             </visual>
-            <collision>
+            <!--collision>
                   <geometry>
                   <box size="${motor_x} ${motor_y} ${motor_z}"/>
                   </geometry>
                   <origin xyz="0 .02 0"/>
-            </collision>
+            </collision-->
             <inertial>
-                  <mass value="1"/>
-                  <inertia ixx="0.4" ixy="0.0" ixz="0.0" iyy="0.4" iyz="0.0" izz="0.2"/>
+                  <mass value="${DIP_mass}"/>
+                  <inertia ixx="1.0e-03" ixy="0.0" ixz="0.0"
+               iyy="1.0e-03" iyz="0.0"
+               izz="1.0e-03" />
             </inertial>
       </link>
 
-      <joint name="thumb_joint_to_motor_thumb_DIP" type="fixed">
+      <joint name="motor_thumb_DIP_joint" type="fixed">
             <axis xyz="1 0 0"/>
             <parent link="thumb_joint"/>
             <child link="motor_thumb_DIP"/>
@@ -488,14 +535,17 @@
                   </material>
             </visual>
             <inertial>
-                  <mass value="1"/>
-                  <inertia ixx="0.4" ixy="0.0" ixz="0.0" iyy="0.4" iyz="0.0" izz="0.2"/>
+                  <mass value="0.001"/>
+                  <inertia ixx="1.0e-03" ixy="0.0" ixz="0.0"
+               iyy="1.0e-03" iyz="0.0"
+               izz="1.0e-03" />
+                  
             </inertial>
       </link>
 
       <joint name="pris_thumb_DIP_joint" type="prismatic">
             <axis xyz="0 0 -1"/>
-            <limit effort="1000.0" lower="0.0" upper="0.01" velocity="0.1"/>
+            <limit effort="1000.0" lower="0.0" upper="${motor_max_upper}" velocity="0.1"/>
             <parent link="motor_thumb_DIP"/>
             <child link="pris_thumb_DIP"/>
             <!--origin xyz="0 .03 0" rpy = "1.57 0 0"/-->
@@ -546,13 +596,15 @@
             <origin xyz = "${MCP_link_x} ${MCP_link_y} ${MCP_link_z}" rpy = "${finger_roll} ${finger_pitch} ${finger_yaw}"/>
       </collision>
       <inertial>
-            <mass value="1"/>
-            <inertia ixx="0.4" ixy="0.0" ixz="0.0" iyy="0.4" iyz="0.0" izz="0.2"/>
+            <mass value="${MCP_mass}"/>
+            <inertia ixx="1.0e-03" ixy="0.0" ixz="0.0"
+               iyy="1.0e-03" iyz="0.0"
+               izz="1.0e-03" />
       </inertial>
       </link>
 
 
-      <joint name="knuckle_index_to_index_MCP" type="revolute">
+      <joint name="index_MCP_joint" type="revolute">
             <axis xyz="-1 0 0"/>
             <limit effort="1000.0" lower="0.0" upper="1.3" velocity="0.5"/>
             <parent link="knuckle_index"/>
@@ -583,12 +635,14 @@
             <origin xyz = "${PIP_link_x} ${PIP_link_y} ${PIP_link_z}" rpy = "${finger_roll} ${finger_pitch} ${finger_yaw}"/>
       </collision>
       <inertial>
-            <mass value="1"/>
-            <inertia ixx="0.4" ixy="0.0" ixz="0.0" iyy="0.4" iyz="0.0" izz="0.2"/>
+            <mass value="${PIP_mass}"/>
+            <inertia ixx="1.0e-03" ixy="0.0" ixz="0.0"
+               iyy="1.0e-03" iyz="0.0"
+               izz="1.0e-03" />
       </inertial>
       </link>
 
-      <joint name="index_MCP_to_index_PIP" type="revolute">
+      <joint name="index_PIP_joint" type="revolute">
             <axis xyz="-1 0 0"/>
             <limit effort="1000.0" lower="0.0" upper="1.0" velocity="0.5"/>
             <parent link="index_MCP"/>
@@ -620,12 +674,14 @@
             <origin xyz = "${DIP_link_x} ${DIP_link_y} ${DIP_link_z}" rpy = "${finger_roll} ${finger_pitch} ${finger_yaw}"/>
       </collision>
       <inertial>
-            <mass value="1"/>
-            <inertia ixx="0.4" ixy="0.0" ixz="0.0" iyy="0.4" iyz="0.0" izz="0.2"/>
+            <mass value="${DIP_mass}"/>
+            <inertia ixx="1.0e-03" ixy="0.0" ixz="0.0"
+               iyy="1.0e-03" iyz="0.0"
+               izz="1.0e-03" />
       </inertial>
       </link>
       
-      <joint name="index_PIP_to_index_DIP" type="revolute">
+      <joint name="index_DIP_joint" type="revolute">
             <axis xyz="-1 0 0"/>
             <limit effort="1000.0" lower="0.0" upper="1.0" velocity="0.5"/>
             <parent link="index_PIP"/>
@@ -670,12 +726,14 @@
             <origin xyz = "${MCP_link_x} ${MCP_link_y} ${MCP_link_z}" rpy = "${finger_roll} ${finger_pitch} ${finger_yaw}"/>
       </collision>
       <inertial>
-            <mass value="1"/>
-            <inertia ixx="0.4" ixy="0.0" ixz="0.0" iyy="0.4" iyz="0.0" izz="0.2"/>
+            <mass value="${MCP_mass}"/>
+            <inertia ixx="1.0e-03" ixy="0.0" ixz="0.0"
+               iyy="1.0e-03" iyz="0.0"
+               izz="1.0e-03" />
       </inertial>
       </link>
 
-      <joint name="knuckle_middle_to_middle_MCP" type="revolute">
+      <joint name="middle_MCP_joint" type="revolute">
             <axis xyz="-1 0 0"/>
             <limit effort="1000.0" lower="0.0" upper="1.3" velocity="0.5"/>
             <parent link="knuckle_middle"/>
@@ -706,12 +764,14 @@
             <origin xyz = "${PIP_link_x} ${PIP_link_y} ${PIP_link_z}" rpy = "${finger_roll} ${finger_pitch} ${finger_yaw}"/>
       </collision>
       <inertial>
-            <mass value="1"/>
-            <inertia ixx="0.4" ixy="0.0" ixz="0.0" iyy="0.4" iyz="0.0" izz="0.2"/>
+            <mass value="${PIP_mass}"/>
+            <inertia ixx="1.0e-03" ixy="0.0" ixz="0.0"
+               iyy="1.0e-03" iyz="0.0"
+               izz="1.0e-03" />
       </inertial>
       </link>
 
-      <joint name="middle_MCP_to_middle_PIP" type="revolute">
+      <joint name="middle_PIP_joint" type="revolute">
             <axis xyz="-1 0 0"/>
             <limit effort="1000.0" lower="0.0" upper="1.0" velocity="0.5"/>
             <parent link="middle_MCP"/>
@@ -742,12 +802,14 @@
             <origin xyz = "${DIP_link_x} ${DIP_link_y} ${DIP_link_z}" rpy = "${finger_roll} ${finger_pitch} ${finger_yaw}"/>
       </collision>
       <inertial>
-            <mass value="1"/>
-            <inertia ixx="0.4" ixy="0.0" ixz="0.0" iyy="0.4" iyz="0.0" izz="0.2"/>
+            <mass value="${DIP_mass}"/>
+            <inertia ixx="1.0e-03" ixy="0.0" ixz="0.0"
+               iyy="1.0e-03" iyz="0.0"
+               izz="1.0e-03" />
       </inertial>
       </link>
       
-      <joint name="middle_PIP_to_middle_DIP" type="revolute">
+      <joint name="middle_DIP_joint" type="revolute">
             <axis xyz="-1 0 0"/>
             <limit effort="1000.0" lower="0.0" upper="1.0" velocity="0.5"/>
             <parent link="middle_PIP"/>
@@ -793,12 +855,14 @@
             <origin xyz = "${MCP_link_x} ${MCP_link_y} ${MCP_link_z}" rpy = "${finger_roll} ${finger_pitch} ${finger_yaw}"/>
       </collision>
       <inertial>
-            <mass value="1"/>
-            <inertia ixx="0.4" ixy="0.0" ixz="0.0" iyy="0.4" iyz="0.0" izz="0.2"/>
+            <mass value="${MCP_mass}"/>
+            <inertia ixx="1.0e-03" ixy="0.0" ixz="0.0"
+               iyy="1.0e-03" iyz="0.0"
+               izz="1.0e-03" />
       </inertial>
       </link>
 
-      <joint name="knuckle_ring_to_ring_MCP" type="revolute">
+      <joint name="ring_MCP_joint" type="revolute">
             <axis xyz="-1 0 0"/>
             <limit effort="1000.0" lower="0.0" upper="1.3" velocity="0.5"/>
             <parent link="knuckle_ring"/>
@@ -829,12 +893,14 @@
             <origin xyz = "${PIP_link_x} ${PIP_link_y} ${PIP_link_z}" rpy = "${finger_roll} ${finger_pitch} ${finger_yaw}"/>
       </collision>
       <inertial>
-            <mass value="1"/>
-            <inertia ixx="0.4" ixy="0.0" ixz="0.0" iyy="0.4" iyz="0.0" izz="0.2"/>
+            <mass value="${PIP_mass}"/>
+            <inertia ixx="1.0e-03" ixy="0.0" ixz="0.0"
+               iyy="1.0e-03" iyz="0.0"
+               izz="1.0e-03" />
       </inertial>
       </link>
 
-      <joint name="ring_MCP_to_ring_PIP" type="revolute">
+      <joint name="ring_PIP_joint" type="revolute">
             <axis xyz="-1 0 0"/>
             <limit effort="1000.0" lower="0.0" upper="1.0" velocity="0.5"/>
             <parent link="ring_MCP"/>
@@ -865,12 +931,14 @@
             <origin xyz = "${DIP_link_x} ${DIP_link_y} ${DIP_link_z}" rpy = "${finger_roll} ${finger_pitch} ${finger_yaw}"/>            
       </collision>
       <inertial>
-            <mass value="1"/>
-            <inertia ixx="0.4" ixy="0.0" ixz="0.0" iyy="0.4" iyz="0.0" izz="0.2"/>
+            <mass value="${DIP_mass}"/>
+            <inertia ixx="1.0e-03" ixy="0.0" ixz="0.0"
+               iyy="1.0e-03" iyz="0.0"
+               izz="1.0e-03" />
       </inertial>
       </link>
       
-      <joint name="ring_PIP_to_ring_DIP" type="revolute">
+      <joint name="ring_DIP_joint" type="revolute">
             <axis xyz="-1 0 0"/>
             <limit effort="1000.0" lower="0.0" upper="1.0" velocity="0.5"/>
             <parent link="ring_PIP"/>
@@ -916,12 +984,14 @@
             <origin xyz = "${MCP_link_x} ${MCP_link_y} ${MCP_link_z}" rpy = "${finger_roll} ${finger_pitch} ${finger_yaw}"/>
       </collision>
       <inertial>
-            <mass value="1"/>
-            <inertia ixx="0.4" ixy="0.0" ixz="0.0" iyy="0.4" iyz="0.0" izz="0.2"/>
+            <mass value="${MCP_mass}"/>
+            <inertia ixx="1.0e-03" ixy="0.0" ixz="0.0"
+               iyy="1.0e-03" iyz="0.0"
+               izz="1.0e-03" />
       </inertial>
       </link>
 
-      <joint name="knuckle_little_to_little_MCP" type="revolute">
+      <joint name="little_MCP_joint" type="revolute">
             <axis xyz="-1 0 0"/>
             <limit effort="1000.0" lower="0.0" upper="1.3" velocity="0.5"/>
             <parent link="knuckle_little"/>
@@ -952,12 +1022,14 @@
             <origin xyz = "${PIP_link_x} ${PIP_link_y} ${PIP_link_z}" rpy = "${finger_roll} ${finger_pitch} ${finger_yaw}"/>
       </collision>
       <inertial>
-            <mass value="1"/>
-            <inertia ixx="0.4" ixy="0.0" ixz="0.0" iyy="0.4" iyz="0.0" izz="0.2"/>
+            <mass value="${PIP_mass}"/>
+            <inertia ixx="1.0e-03" ixy="0.0" ixz="0.0"
+               iyy="1.0e-03" iyz="0.0"
+               izz="1.0e-03" />
       </inertial>
       </link>
 
-      <joint name="little_MCP_to_little_PIP" type="revolute">
+      <joint name="little_PIP_joint" type="revolute">
             <axis xyz="-1 0 0"/>
             <limit effort="1000.0" lower="0.0" upper="1.0" velocity="0.5"/>
             <parent link="little_MCP"/>
@@ -988,12 +1060,14 @@
             <origin xyz = "${DIP_link_x} ${DIP_link_y} ${DIP_link_z}" rpy = "${finger_roll} ${finger_pitch} ${finger_yaw}"/>
       </collision>
       <inertial>
-            <mass value="1"/>
-            <inertia ixx="0.4" ixy="0.0" ixz="0.0" iyy="0.4" iyz="0.0" izz="0.2"/>
+            <mass value="${DIP_mass}"/>
+            <inertia ixx="1.0e-03" ixy="0.0" ixz="0.0"
+               iyy="1.0e-03" iyz="0.0"
+               izz="1.0e-03" />
       </inertial>
       </link>
       
-      <joint name="little_PIP_to_little_DIP" type="revolute">
+      <joint name="little_DIP_joint" type="revolute">
             <axis xyz="-1 0 0"/>
             <limit effort="1000.0" lower="0.0" upper="1.0" velocity="0.5"/>
             <parent link="little_PIP"/>
@@ -1025,7 +1099,8 @@
 
 
       <!--****************MOTORS*****************-->
-      <!--motor INDEX -->
+      <!--motor INDEX -->    
+
       <link name="motor_index">
             <visual>
                   <geometry>
@@ -1036,19 +1111,21 @@
                   <color rgba="0.25 0.25 0.25 1"/>
                   </material>
             </visual>
-            <collision>
+            <!--collision>
                   <geometry>
                   <box size="${motor_x} ${motor_y} ${motor_z}"/>
                   </geometry>
                   <origin xyz="0 .02 0"/>
-            </collision>
+            </collision-->
             <inertial>
-                  <mass value="1"/>
-                  <inertia ixx="0.4" ixy="0.0" ixz="0.0" iyy="0.4" iyz="0.0" izz="0.2"/>
+                  <mass value="${motor_mass}"/>
+                  <inertia ixx="1.0e-03" ixy="0.0" ixz="0.0"
+               iyy="1.0e-03" iyz="0.0"
+               izz="1.0e-03" />
             </inertial>
       </link>
 
-      <joint name="hand_palm_to_motor_index" type="fixed">
+      <joint name="motor_index_joint" type="fixed">
             <axis xyz="1 0 0"/>
             <parent link="knuckle_index"/>
             <child link="motor_index"/>
@@ -1065,14 +1142,16 @@
                   </material>
             </visual>
             <inertial>
-                  <mass value="1"/>
-                  <inertia ixx="0.4" ixy="0.0" ixz="0.0" iyy="0.4" iyz="0.0" izz="0.2"/>
+                  <mass value="0.001"/>
+                  <inertia ixx="1.0e-03" ixy="0.0" ixz="0.0"
+               iyy="1.0e-03" iyz="0.0"
+               izz="1.0e-03" />
             </inertial>
       </link>
 
       <joint name="pris_index_joint" type="prismatic">
             <axis xyz="0 0 -1"/>
-            <limit effort="1000.0" lower="0.0" upper="0.01" velocity="0.1"/>
+            <limit effort="1000.0" lower="0.0" upper="${motor_max_upper}" velocity="0.1"/>
             <parent link="motor_index"/>
             <child link="pris_index"/>
             <!--origin xyz="0 .03 0" rpy = "1.57 0 0"/-->
@@ -1090,19 +1169,21 @@
                   <material name="black">
                   </material>
             </visual>
-            <collision>
+            <!--collision>
                   <geometry>
                   <box size="${motor_x} ${motor_y} ${motor_z}"/>
                   </geometry>
                   <origin xyz="0 .02 0"/>
-            </collision>
+            </collision-->
             <inertial>
-                  <mass value="1"/>
-                  <inertia ixx="0.4" ixy="0.0" ixz="0.0" iyy="0.4" iyz="0.0" izz="0.2"/>
+                  <mass value="${motor_mass}"/>
+                  <inertia ixx="1.0e-03" ixy="0.0" ixz="0.0"
+               iyy="1.0e-03" iyz="0.0"
+               izz="1.0e-03" />
             </inertial>
       </link>
 
-      <joint name="hand_palm_to_motor_middle" type="fixed">
+      <joint name="motor_middle_joint" type="fixed">
             <axis xyz="1 0 0"/>
             <parent link="knuckle_middle"/>
             <child link="motor_middle"/>
@@ -1119,14 +1200,16 @@
                   </material>
             </visual>
             <inertial>
-                  <mass value="1"/>
-                  <inertia ixx="0.4" ixy="0.0" ixz="0.0" iyy="0.4" iyz="0.0" izz="0.2"/>
+                  <mass value="0.001"/>
+                  <inertia ixx="1.0e-03" ixy="0.0" ixz="0.0"
+               iyy="1.0e-03" iyz="0.0"
+               izz="1.0e-03" />
             </inertial>
       </link>
 
       <joint name="pris_middle_joint" type="prismatic">
             <axis xyz="0 0 -1"/>
-            <limit effort="1000.0" lower="0.0" upper="0.01" velocity="0.1"/>
+            <limit effort="1000.0" lower="0.0" upper="${motor_max_upper}" velocity="0.1"/>
             <parent link="motor_middle"/>
             <child link="pris_middle"/>
             <!--origin xyz="0 .03 0" rpy = "1.57 0 0"/-->
@@ -1144,19 +1227,21 @@
                   <material name="black">
                   </material>
             </visual>
-            <collision>
+            <!--collision>
                   <geometry>
                   <box size="${motor_x} ${motor_y} ${motor_z}"/>
                   </geometry>
                   <origin xyz="0 .02 0"/>
-            </collision>
+            </collision-->
             <inertial>
-                  <mass value="1"/>
-                  <inertia ixx="0.4" ixy="0.0" ixz="0.0" iyy="0.4" iyz="0.0" izz="0.2"/>
+                  <mass value="${motor_mass}"/>
+                  <inertia ixx="1.0e-03" ixy="0.0" ixz="0.0"
+               iyy="1.0e-03" iyz="0.0"
+               izz="1.0e-03" />
             </inertial>
       </link>
 
-      <joint name="hand_palm_to_motor_ring" type="fixed">
+      <joint name="motor_ring_joint" type="fixed">
             <axis xyz="1 0 0"/>
             <parent link="knuckle_ring"/>
             <child link="motor_ring"/>
@@ -1173,14 +1258,16 @@
                   </material>
             </visual>
             <inertial>
-                  <mass value="1"/>
-                  <inertia ixx="0.4" ixy="0.0" ixz="0.0" iyy="0.4" iyz="0.0" izz="0.2"/>
+                  <mass value="0.001"/>
+                  <inertia ixx="1.0e-03" ixy="0.0" ixz="0.0"
+               iyy="1.0e-03" iyz="0.0"
+               izz="1.0e-03" />
             </inertial>
       </link>
 
       <joint name="pris_ring_joint" type="prismatic">
             <axis xyz="0 0 -1"/>
-            <limit effort="1000.0" lower="0.0" upper="0.01" velocity="0.1"/>
+            <limit effort="1000.0" lower="0.0" upper="${motor_max_upper}" velocity="0.1"/>
             <parent link="motor_ring"/>
             <child link="pris_ring"/>
             <!--origin xyz="0 .03 0" rpy = "1.57 0 0"/-->
@@ -1198,19 +1285,21 @@
                   <material name="black">
                   </material>
             </visual>
-            <collision>
+            <!--collision>
                   <geometry>
                   <box size="${motor_x} ${motor_y} ${motor_z}"/>
                   </geometry>
                   <origin xyz="0 .02 0"/>
-            </collision>
+            </collision-->
             <inertial>
-                  <mass value="1"/>
-                  <inertia ixx="0.4" ixy="0.0" ixz="0.0" iyy="0.4" iyz="0.0" izz="0.2"/>
+                  <mass value="${motor_mass}"/>
+                  <inertia ixx="1.0e-03" ixy="0.0" ixz="0.0"
+               iyy="1.0e-03" iyz="0.0"
+               izz="1.0e-03" />
             </inertial>
       </link>
 
-      <joint name="hand_palm_to_motor_little" type="fixed">
+      <joint name="motor_little_joint" type="fixed">
             <axis xyz="1 0 0"/>
             <parent link="knuckle_little"/>
             <child link="motor_little"/>
@@ -1227,20 +1316,22 @@
                   </material>
             </visual>
             <inertial>
-                  <mass value="1"/>
-                  <inertia ixx="0.4" ixy="0.0" ixz="0.0" iyy="0.4" iyz="0.0" izz="0.2"/>
+                  <mass value="0.001"/>
+                  <inertia ixx="1.0e-03" ixy="0.0" ixz="0.0"
+               iyy="1.0e-03" iyz="0.0"
+               izz="1.0e-03" />
             </inertial>
       </link>
 
       <joint name="pris_little_joint" type="prismatic">
             <axis xyz="0 0 -1"/>
-            <limit effort="1000.0" lower="0.0" upper="0.01" velocity="0.1"/>
+            <limit effort="1000.0" lower="0.0" upper="${motor_max_upper}" velocity="0.1"/>
             <parent link="motor_little"/>
             <child link="pris_little"/>
             <!--origin xyz="0 .03 0" rpy = "1.57 0 0"/-->
             <origin xyz="0.0 ${motor_joint_y + 0.0445} 0.0" rpy = "1.57 0 0"/>
       </joint>
       <!--motor little  end-->
-
+</xacro:macro>
 </robot>
 
